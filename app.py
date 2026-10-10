@@ -1,7 +1,5 @@
 import streamlit as st
-from PIL import Image
 import os
-import io
 
 # Page Config
 st.set_page_config(
@@ -9,21 +7,6 @@ st.set_page_config(
     page_icon="🎓",
     layout="centered"
 )
-
-# Custom Styling
-st.markdown("""
-    <style>
-    .main { background-color: #0b1326; }
-    .stButton>button {
-        width: 100%;
-        background-color: #10b981;
-        color: #000;
-        font-weight: bold;
-        border-radius: 8px;
-        padding: 10px;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Session State Initializations
 if 'step' not in st.session_state:
@@ -34,7 +17,7 @@ if 'registered_utrs' not in st.session_state:
 st.title("🎓 GRIET Campus Event Portal")
 st.write("Official Autonomous Event Registration & Digital E-Pass System")
 
-# Event Selection
+# Event Options
 EVENTS = {
     "HackGRIET 2026": {"fee": "₹300 / team", "tag": "36-Hour Hackathon"},
     "DevConnect Meetup": {"fee": "₹150", "tag": "Open Source & Cloud"},
@@ -82,13 +65,12 @@ elif st.session_state.step == 2:
     st.markdown(f"**Student:** {data['name']} ({data['roll']})")
     st.markdown(f"**Event:** {data['event']} — **{data['fee']}**")
 
-    # Display myqr.jpeg reliably from relative root or backend directory
+    # Display Payment QR
     qr_path = "backend/myqr.jpeg" if os.path.exists("backend/myqr.jpeg") else "myqr.jpeg"
     if os.path.exists(qr_path):
-        qr_img = Image.open(qr_path)
-        st.image(qr_img, caption="Scan QR via any UPI App", width=250)
+        st.image(qr_path, caption="Scan QR via any UPI App", width=250)
     else:
-        st.warning("QR Code image file (`myqr.jpeg`) not found. Please upload to repo root.")
+        st.warning("QR Code image file (`myqr.jpeg`) not found in backend folder.")
 
     utr_input = st.text_input("Enter 12-Digit UPI / UTR Transaction ID", max_chars=12, placeholder="123456789012")
 
@@ -101,11 +83,10 @@ elif st.session_state.step == 2:
     with col2:
         if st.button("Verify & Generate Pass"):
             utr_clean = utr_input.strip()
-            # Anti-Fraud Validations
             if not (utr_clean.isdigit() and len(utr_clean) == 12):
                 st.error("❌ Invalid UTR! Must be exactly 12 numeric digits.")
             elif utr_clean in st.session_state.registered_utrs:
-                st.error("🚨 Anti-Fraud Alert: This UTR has already been used for another registration!")
+                st.error("🚨 Anti-Fraud Alert: This UTR has already been used!")
             else:
                 st.session_state.registered_utrs.add(utr_clean)
                 st.session_state.user_data["utr"] = utr_clean
@@ -119,7 +100,6 @@ elif st.session_state.step == 3:
     st.balloons()
     st.success("🎉 Registration Confirmed!")
 
-    # Digital Pass Card Display
     st.markdown("---")
     st.markdown(f"""
     ### 🎟️ OFFICIAL GRIET DIGITAL E-PASS
@@ -133,7 +113,6 @@ elif st.session_state.step == 3:
     ---
     """)
 
-    # Generate Downloadable Pass Summary (.txt / printable ticket)
     pass_text = f"""
 ========================================
    GOKARAJU RANGARAJU INSTITUTE OF 
