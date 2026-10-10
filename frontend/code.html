@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GRIET Event Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      :root {
+        --bg: #0b1326;
+        --panel: rgba(15, 23, 42, 0.9);
+        --panel-border: rgba(148, 163, 184, 0.14);
+        --emerald: #34d399;
+        --emerald-strong: #10b981;
+        --slate-100: #f8fafc;
+        --slate-300: #cbd5e1;
+        --slate-400: #94a3b8;
+        --slate-700: #334155;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--slate-100);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(2, 6, 23, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 50;
+      }
+
+      .modal.hidden { display: none; }
+
+      .card {
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.15);
+        border-radius: 1.25rem;
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.5);
+      }
+
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen bg-[#0B1326] text-slate-100">
+      <header class="sticky top-0 z-40 w-full border-b border-indigo-900/40 bg-[#0B1326]/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-900 via-indigo-950 to-emerald-950 border border-emerald-500/30 flex items-center justify-center shadow-lg shadow-emerald-950/20">
+              <span class="text-emerald-400 text-lg">🎓</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-white text-lg tracking-wider">GRIET</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  AUTONOMOUS
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 leading-none">Bachupally, Hyderabad</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button type="button" aria-label="Campus notifications" class="p-2 text-slate-300 rounded-lg bg-slate-800/40 border border-slate-700/40">
+              🔔
+            </button>
+            <button id="open-register" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs tracking-wide transition-all shadow-md shadow-emerald-500/20">
+              <span>✨</span>
+              <span>Pass Registration</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="relative overflow-hidden pt-12 pb-16 px-4 sm:px-6 lg:px-8 border-b border-indigo-950/60 bg-gradient-to-b from-[#0B1326] via-[#101935] to-[#0B1326]">
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full"></div>
+          <div class="absolute top-20 right-10 w-[350px] h-[250px] bg-indigo-600/10 blur-[100px] pointer-events-none rounded-full"></div>
+
+          <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-800/50 text-xs text-slate-300 mb-6 shadow-sm">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="font-semibold text-emerald-400">NAAC A++ • NIRF Ranked</span>
+              <span class="text-slate-500">|</span>
+              <span>EAMCET Code: <span class="font-bold text-white">GRRR</span></span>
+            </div>
+
+            <p class="text-xs uppercase tracking-widest font-bold text-emerald-400 mb-2">
+              Gokaraju Rangaraju Institute of Engineering and Technology
+            </p>
+
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight mb-4">
+              Innovate. <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Engineer.</span> Elevate.
+            </h1>
+
+            <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed mb-8">
+              Autonomous engineering excellence empowering next-generation engineers, tech innovators, and researchers in Bachupally, Hyderabad since 1997.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-12">
+              <button id="hero-register" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25">
+                <span>✨</span>
+                <span>Register for Events</span>
+              </button>
+              <button id="explore-campus" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-white border border-slate-700/60 font-semibold text-sm flex items-center justify-center gap-2">
+                <span class="text-emerald-400">🧭</span>
+                <span>Explore Campus & Research</span>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex items-center gap-2 text-emerald-400 mb-1">
+                  <span>🏆</span>
+                  <span class="text-xs font-semibold text-slate-400">Campus Placements</span>
+                </div>
+                <div class="text-xl font-extrabold text-white">95%+</div>
+                <div class="text-[11px] text-slate-400">120+ Recruiter Visits</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex items-center gap-2 text-emerald-400 mb-1">
+                  <span>💼</span>
+                  <span class="text-xs font-semibold text-slate-400">Highest CTC</span>
+                </div>
+                <div class="text-xl font-extrabold text-white">₹44 LPA</div>
+                <div class="text-[11px] text-slate-400">Tier-1 Product Tech</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex items-center gap-2 text-emerald-400 mb-1">
+                  <span>🧪</span>
+                  <span class="text-xs font-semibold text-slate-400">Advanced Labs</span>
+                </div>
+                <div class="text-xl font-extrabold text-white">50+</div>
+                <div class="text-[11px] text-slate-400">DST & AICTE Funded</div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
+                <div class="flex items-center gap-2 text-emerald-400 mb-1">
+                  <span>👥</span>
+                  <span class="text-xs font-semibold text-slate-400">Tech Societies</span>
+                </div>
+                <div class="text-xl font-extrabold text-white">12+</div>
+                <div class="text-[11px] text-slate-400">IEEE, ACM, CSI, IETE</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="events" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div class="flex items-end justify-between mb-8">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-1">Fall Season 2025</div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Flagship Events & Summits</h2>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700" id="event-count">4 Scheduled</span>
+          </div>
+
+          <div id="event-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </section>
+
+        <section id="about" class="py-16 px-4 sm:px-6 lg:px-8 border-t border-indigo-950/60 bg-[#060E20]">
+          <div class="max-w-7xl mx-auto">
+            <div class="max-w-3xl mb-12">
+              <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Institution Profile</span>
+              <h2 class="text-3xl font-black text-white mt-1 mb-4">Autonomous Excellence & Research</h2>
+              <p class="text-sm text-slate-300 leading-relaxed">
+                Gokaraju Rangaraju Institute of Engineering and Technology is established to promote technical education with global relevance. Approved by AICTE, permanently affiliated to JNTUH, and conferred autonomous status.
+              </p>
+
+              <div class="mt-4">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">NBA Accredited B.Tech Programs</span>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">CSE</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">AIML</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">Data Science</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">IT</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">ECE</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">EEE</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">Mechanical</span>
+                  <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-700/60 text-slate-300 text-xs font-medium">Civil</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">🖥️</div>
+                <h3 class="text-base font-bold text-white mb-2">Centers of Excellence</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">Dedicated R&D labs in AI/ML, Robotics & Mechatronics, IoT, 5G Wireless, and Clean Energy microgrids funded by DST & AICTE.</p>
+              </div>
+
+              <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4">🌿</div>
+                <h3 class="text-base font-bold text-white mb-2">24-Acre Lush Green Campus</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">Situated in Bachupally, Hyderabad. Features modern acoustic auditoriums, open-air amphitheater, smart sports complexes, and student incubation park.</p>
+              </div>
+
+              <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-4">🚀</div>
+                <h3 class="text-base font-bold text-white mb-2">GRIET Incubation & Innovation Cell</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">Mentoring 30+ student ventures with patent filing assistance, prototype seed funding, and corporate venture capital networking.</p>
+              </div>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-emerald-400 text-xs font-semibold">
+                  <span>📍</span>
+                  <span>Campus Map & Directions</span>
+                </div>
+                <h4 class="text-lg font-bold text-white">Bachupally, Nizampet Road, Hyderabad</h4>
+                <p class="text-xs text-slate-400 max-w-xl">Convenient access from Miyapur Metro Station (6 km) and JNTU Hitech City corridor. Dedicated college bus fleet servicing 45+ city routes.</p>
+              </div>
+              <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600/50 text-xs font-semibold whitespace-nowrap transition-colors">Open in Google Maps</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="border-t border-slate-800/80 bg-[#060E20] py-8 px-4 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto space-y-2">
+          <p class="font-semibold text-slate-300">GRIET Autonomous • EAMCET Code: <span class="text-emerald-400 font-bold">GRRR</span></p>
+          <p>Nizampet Road, Bachupally, Kukatpally, Hyderabad, Telangana - 500090</p>
+          <p class="text-[11px] text-slate-400 pt-2 border-t border-slate-800/50">© 2026 Gokaraju Rangaraju Institute of Engineering & Technology. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <div id="register-modal" class="modal hidden">
+      <div class="card relative w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] bg-[#0E1629]">
+        <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+          <div>
+            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">Step 1 of 2 • Student Details</span>
+            <h3 class="text-lg font-bold text-white">Event Registration</h3>
+          </div>
+          <button type="button" class="close-register p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" aria-label="Close registration form">✕</button>
+        </div>
+
+        <form id="register-form" class="p-6 overflow-y-auto space-y-4">
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1.5">Select Event / Workshop</label>
+            <select id="event-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"></select>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1.5">Full Name *</label>
+            <input id="full-name" type="text" required placeholder="e.g. Rahul Varma" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1.5">Phone Number (+91) *</label>
+              <input id="phone" type="tel" required placeholder="98765 43210" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1.5">Email Address</label>
+              <input id="email" type="email" placeholder="student@griet.ac.in" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1.5">Roll / Hall Ticket No. *</label>
+            <input id="roll-number" type="text" required placeholder="e.g. 21241A05XX" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1.5">Year of Study</label>
+              <div class="grid grid-cols-4 gap-1">
+                <button type="button" class="year-btn active bg-emerald-500 text-slate-950 border border-emerald-400 py-2 text-xs font-bold rounded-lg" data-year="I">I</button>
+                <button type="button" class="year-btn bg-slate-900 text-slate-300 border border-slate-700 py-2 text-xs font-bold rounded-lg" data-year="II">II</button>
+                <button type="button" class="year-btn bg-slate-900 text-slate-300 border border-slate-700 py-2 text-xs font-bold rounded-lg" data-year="III">III</button>
+                <button type="button" class="year-btn bg-slate-900 text-slate-300 border border-slate-700 py-2 text-xs font-bold rounded-lg" data-year="IV">IV</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-slate-300 block mb-1.5">Branch / Dept.</label>
+              <select id="branch" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                <option>CSE</option>
+                <option>AIML</option>
+                <option>DS</option>
+                <option>IT</option>
+                <option>ECE</option>
+                <option>EEE</option>
+                <option>MECH</option>
+                <option>CIVIL</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-900/50 flex items-center justify-between">
+            <div>
+              <span class="text-[11px] text-slate-400 block">Registration Fee</span>
+              <span id="selected-fee" class="text-base font-extrabold text-emerald-400">₹300</span>
+            </div>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-500/20">
+              <span>Continue to UPI</span>
+              <span>→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="payment-modal" class="modal hidden">
+      <div class="card relative w-full max-w-md overflow-hidden bg-[#0D1527] border border-emerald-500/30">
+        <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+          <div>
+            <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">Step 2 of 2 • Instant Checkout</span>
+            <h3 class="text-base font-bold text-white">UPI Payment & Pass</h3>
+          </div>
+          <button type="button" class="close-payment p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" aria-label="Close payment form">✕</button>
+        </div>
+
+        <div id="payment-confirmation" class="hidden p-6 text-center space-y-4">
+          <div class="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto text-2xl">✔</div>
+          <h4 id="confirmation-heading" class="text-lg font-bold text-white">Registration received</h4>
+          <p class="text-xs text-slate-300">Welcome, <span id="confirmation-name" class="font-semibold text-white"></span>! Your entry pass for <span id="confirmation-event" class="font-semibold text-emerald-400"></span> has been confirmed.</p>
+          <div id="epass-card" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-left text-xs space-y-1">
+            <div class="flex justify-between text-slate-400"><span>Registration ID:</span> <span id="confirmation-id" class="text-white font-mono"></span></div>
+            <div class="flex justify-between text-slate-400"><span>Roll No:</span> <span id="confirmation-roll" class="text-white font-mono"></span></div>
+            <div class="flex justify-between text-slate-400"><span>UTR Ref:</span> <span id="confirmation-utr" class="text-emerald-400 font-mono"></span></div>
+            <div class="flex justify-between text-slate-400"><span>Status:</span> <span id="confirmation-status" class="text-emerald-400 font-semibold"></span></div>
+          </div>
+          <button id="download-pass" type="button" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2">
+            <span>📄</span>
+            <span>Download Digital E-Pass</span>
+          </button>
+        </div>
+
+        <form id="payment-form" class="p-5 space-y-4">
+          <div class="p-3 rounded-xl bg-indigo-950/50 border border-indigo-900 flex justify-between items-center">
+            <div>
+              <p class="text-[11px] text-slate-400">Total Payable Amount</p>
+              <p id="pay-amount" class="text-lg font-extrabold text-emerald-400">₹300</p>
+            </div>
+            <span id="pay-event" class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">HackGRIET 2025</span>
+          </div>
+
+          <div class="flex flex-col items-center justify-center p-4 rounded-xl bg-white border border-slate-200 text-center">
+            <div class="bg-white p-3 rounded-xl inline-block my-4 shadow-lg">
+              <img src="/static/myqr.jpeg" alt="GRIET Payment QR" class="w-48 h-48 object-contain mx-auto" />
+            </div>
+            <p class="text-[11px] font-semibold text-slate-700 mt-2">Scan with Google Pay, PhonePe, Paytm or BHIM</p>
+          </div>
+
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+            <div class="font-mono text-slate-300">grietevents@hdfcbank</div>
+            <button id="copy-upi" type="button" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-emerald-400 font-semibold">Copy UPI</button>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">Enter 12-Digit UTR / Transaction Reference ID *</label>
+            <input id="utr" type="text" required maxlength="12" placeholder="e.g. 4289XXXXXXXX" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 font-mono tracking-wider focus:outline-none focus:border-emerald-500" />
+            <p class="text-[10px] text-slate-400 mt-1">Found under transaction details in your UPI app.</p>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+            <span>✔</span>
+            <span id="verify-label">Verify & Generate E-Pass</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      
+      const events = [
+        { id: 'hackgriet-2025', apiId: 'hackathon', title: 'HackGRIET 2025', category: '36-Hour National', tag: '₹1,50,000 Pool', host: 'ACM & IEEE STUDENT BRANCH', description: 'Build disruptive AI, Web3, and IoT prototypes in our flagship 36-hour sprint. Mentorship by industry architects.', date: '18 - 20 Oct 2025', meta: '2 - 4 per Team', fee: 300, feeLabel: '₹300 / team', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80' },
+        { id: 'devconnect-meetup', apiId: 'meetup', title: 'DevConnect Meetup', category: 'Open Source & Cloud', tag: 'Hands-on Lab', host: 'DEVELOPER COMMUNITY', description: 'Hands-on workshops in Rust, Kubernetes, and Decentralized systems. Connect with alumni leaders and tech visionaries.', date: '25 Oct 2025', meta: 'Main Auditorium', fee: 150, feeLabel: 'Free (GRIET) / ₹150', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80' },
+        { id: 'ai-summit-2025', apiId: 'tech-talk', title: 'AI Summit 2025', category: 'Research Colloquium', tag: 'Google & Microsoft Speakers', host: 'DEPT. OF AIML & DATA SCIENCE', description: 'Exploring Large Language Models, Multi-Modal Systems, and Autonomous Agents with peer-reviewed student presentations.', date: '02 Nov 2025', meta: 'Certificate + Kit Included', fee: 200, feeLabel: '₹200 / delegate', image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80' },
+        { id: 'pulse-2025', apiId: 'fest', title: 'PULSE 2025', category: 'Annual Cultural Fest', tag: '3-Day Mega Fest', host: 'CULTURAL & TECHNICAL BOARD', description: 'The heartbeat of GRIET campus life! Battle of Bands, Choreonite dance drama, EDM DJ Night, pro-shows and food carnival.', date: '14 - 16 Nov 2025', meta: 'Open Amphitheatre', fee: 250, feeLabel: '₹250 / student', image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80' }
+      ];
+
+      const eventGrid = document.getElementById('event-grid');
+      const eventCount = document.getElementById('event-count');
+      const eventSelect = document.getElementById('event-select');
+      const selectedFee = document.getElementById('selected-fee');
+      const registerModal = document.getElementById('register-modal');
+      const paymentModal = document.getElementById('payment-modal');
+      const paymentForm = document.getElementById('payment-form');
+      const paymentConfirmation = document.getElementById('payment-confirmation');
+      const confirmationName = document.getElementById('confirmation-name');
+      const confirmationEvent = document.getElementById('confirmation-event');
+      const confirmationId = document.getElementById('confirmation-id');
+      const confirmationRoll = document.getElementById('confirmation-roll');
+      const confirmationUtr = document.getElementById('confirmation-utr');
+      const confirmationStatus = document.getElementById('confirmation-status');
+      const confirmationHeading = document.getElementById('confirmation-heading');
+      const verifyButton = paymentForm.querySelector('button[type="submit"]');
+      const verifyLabel = document.getElementById('verify-label');
+      const payAmount = document.getElementById('pay-amount');
+      const payEvent = document.getElementById('pay-event');
+
+      let activeEventId = events[0].id;
+      let currentYear = 'III';
+
+      function renderEvents() {
+        eventCount.textContent = `${events.length} Scheduled`;
+        eventGrid.innerHTML = events.map((event) => `
+          <article class="group relative rounded-2xl overflow-hidden bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 transition-all duration-300 flex flex-col shadow-xl">
+            <div class="relative h-48 sm:h-52 overflow-hidden">
+              <img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+              <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-950/80 text-emerald-400 border border-emerald-500/30">${event.category}</span>
+                <span class="px-2.5 py-1 rounded-md text-[11px] font-semibold bg-indigo-950/80 text-slate-200 border border-indigo-700/30">${event.tag}</span>
+              </div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${event.host}</p>
+                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">${event.title}</h3>
+                <p class="text-xs text-slate-300 leading-relaxed mb-4">${event.description}</p>
+                <div class="grid grid-cols-2 gap-2 text-xs text-slate-400 py-3 border-y border-slate-800/80 mb-4">
+                  <div class="flex items-center gap-1.5"><span>📅</span><span>${event.date}</span></div>
+                  <div class="flex items-center gap-1.5"><span>👥</span><span class="truncate">${event.meta}</span></div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-2">
+                <div>
+                  <span class="text-[10px] text-slate-400 uppercase block font-semibold">Registration Fee</span>
+                  <span class="text-base font-bold text-emerald-400">${event.feeLabel}</span>
+                </div>
+                <button type="button" class="register-event-btn px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5" data-event-id="${event.id}">
+                  <span>Register Now</span>
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+
+        document.querySelectorAll('.register-event-btn').forEach((button) => {
+          button.addEventListener('click', () => {
+            activeEventId = button.dataset.eventId;
+            openRegisterModal();
+          });
+        });
+      }
+
+      function populateEventOptions() {
+        eventSelect.innerHTML = events.map((event) => `
+          <option value="${event.id}" ${event.id === activeEventId ? 'selected' : ''}>${event.title} — ${event.feeLabel}</option>
+        `).join('');
+        const selected = events.find((event) => event.id === activeEventId) || events[0];
+        selectedFee.textContent = selected.feeLabel;
+      }
+
+      function openRegisterModal() {
+        activeEventId = activeEventId || events[0].id;
+        populateEventOptions();
+        registerModal.classList.remove('hidden');
+      }
+
+      function closeRegisterModal() {
+        registerModal.classList.add('hidden');
+      }
+
+      function openPaymentModal() {
+        const selected = events.find((event) => event.id === activeEventId) || events[0];
+        payEvent.textContent = selected.title;
+        payAmount.textContent = `₹${selected.fee}`;
+        paymentModal.classList.remove('hidden');
+      }
+
+      function closePaymentModal() {
+        paymentModal.classList.add('hidden');
+        paymentForm.classList.remove('hidden');
+        paymentConfirmation.classList.add('hidden');
+      }
+
+      async function handleDownloadPDF() {
+        const passElement = document.getElementById('epass-card');
+        if (!passElement) return;
+        if (!window.html2canvas || !window.jspdf?.jsPDF) {
+          alert('PDF download libraries are unavailable. Check your internet connection and try again.');
+          return;
+        }
+
+        try {
+          const canvas = await window.html2canvas(passElement, { scale: 2 });
+          const imageData = canvas.toDataURL('image/png');
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a5');
+          const imageProperties = pdf.getImageProperties(imageData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = imageProperties.height * pdfWidth / imageProperties.width;
+          pdf.addImage(imageData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+          const rollNumber = document.getElementById('confirmation-roll').textContent || 'Ticket';
+          pdf.save(`GRIET_EPass_${rollNumber}.pdf`);
+        } catch (error) {
+          alert('Could not create the PDF pass. Please try again.');
+        }
+      }
+
+      document.getElementById('open-register').addEventListener('click', openRegisterModal);
+      document.getElementById('hero-register').addEventListener('click', openRegisterModal);
+      document.getElementById('explore-campus').addEventListener('click', () => {
+        document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.querySelector('.close-register').addEventListener('click', closeRegisterModal);
+      document.querySelector('.close-payment').addEventListener('click', closePaymentModal);
+      document.getElementById('download-pass').addEventListener('click', handleDownloadPDF);
+
+      eventSelect.addEventListener('change', (event) => {
+        activeEventId = event.target.value;
+        const selected = events.find((item) => item.id === activeEventId) || events[0];
+        selectedFee.textContent = selected.feeLabel;
+      });
+
+      document.querySelectorAll('.year-btn').forEach((button) => {
+        button.addEventListener('click', () => {
+          currentYear = button.dataset.year;
+          document.querySelectorAll('.year-btn').forEach((btn) => {
+            btn.classList.remove('active', 'bg-emerald-500', 'text-slate-950', 'border-emerald-400');
+            btn.classList.add('bg-slate-900', 'text-slate-300', 'border-slate-700');
+          });
+          button.classList.add('active', 'bg-emerald-500', 'text-slate-950', 'border-emerald-400');
+          button.classList.remove('bg-slate-900', 'text-slate-300', 'border-slate-700');
+        });
+      });
+
+      document.getElementById('register-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const fullName = document.getElementById('full-name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const rollNumber = document.getElementById('roll-number').value.trim();
+
+        if (!fullName || !phone || !rollNumber) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        closeRegisterModal();
+        openPaymentModal();
+      });
+
+      document.getElementById('copy-upi').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText('grietevents@hdfcbank');
+          document.getElementById('copy-upi').textContent = 'Copied';
+          setTimeout(() => {
+            document.getElementById('copy-upi').textContent = 'Copy UPI';
+          }, 1500);
+        } catch (error) {
+          alert('Clipboard access is unavailable in this browser.');
+        }
+      });
+
+      document.getElementById('payment-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const utrValue = document.getElementById('utr').value.replace(/\s+/g, '');
+        if (!/^\d{12}$/.test(utrValue)) {
+          alert('Please enter a valid 12-digit UPI / UTR Transaction ID');
+          return;
+        }
+
+        const selected = events.find((item) => item.id === activeEventId) || events[0];
+        const name = document.getElementById('full-name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const rollNo = document.getElementById('roll-number').value.trim();
+        const year = { I: 1, II: 2, III: 3, IV: 4 }[currentYear];
+        const formData = {
+          name,
+          phone,
+          year,
+          branch: document.getElementById('branch').value,
+          roll_number: rollNo,
+          event_id: selected.apiId,
+          payment_method: 'UPI',
+          transaction_utr: utrValue
+        };
+
+        verifyButton.disabled = true;
+        verifyLabel.textContent = 'Verifying transaction...';
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.error?.message || 'Registration failed. Please try again.');
+          }
+
+          confirmationId.textContent = `GRIET-${result.data.id}`;
+          confirmationName.textContent = result.data.name;
+          confirmationEvent.textContent = result.data.event_name;
+          confirmationRoll.textContent = result.data.roll_number;
+          confirmationUtr.textContent = result.data.transaction_utr;
+          confirmationStatus.textContent = result.data.status.replaceAll('_', ' ');
+          confirmationHeading.textContent = result.data.status === 'verified'
+            ? 'Registration confirmed'
+            : 'Registration received';
+
+          paymentForm.classList.add('hidden');
+          paymentConfirmation.classList.remove('hidden');
+        } catch (error) {
+          alert(error.message || 'Could not reach the registration server. Please try again.');
+        } finally {
+          verifyButton.disabled = false;
+          verifyLabel.textContent = 'Verify & Generate E-Pass';
+        }
+      });
+
+      registerModal.addEventListener('click', (event) => {
+        if (event.target === registerModal) closeRegisterModal();
+      });
+
+      paymentModal.addEventListener('click', (event) => {
+        if (event.target === paymentModal) closePaymentModal();
+      });
+
+      renderEvents();
+      populateEventOptions();
+    </script>
+  </body>
+</html>

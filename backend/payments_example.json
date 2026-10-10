@@ -1,0 +1,12 @@
+{
+  "payments": [
+    {
+      "registration_id": "REG001",
+      "event": "Tech Fest",
+      "utr": "012345678901",
+      "amount": "500.00",
+      "currency": "INR",
+      "status": "success"
+    }
+  ]
+}
