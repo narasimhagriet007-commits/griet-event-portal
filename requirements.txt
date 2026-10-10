@@ -3,3 +3,6 @@ requests
 Pillow
 fastapi
 uvicorn
+sqlalchemy
+pydantic
+python-dotenv
