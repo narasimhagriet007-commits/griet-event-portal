@@ -349,7 +349,7 @@ app.add_middleware(
 )
 
 # Serve files from the backend folder (e.g. myqr.jpeg for UPI QR or pass assets)
-app.mount("/static", StaticFiles(directory=str(BASE_DIR)), name="static")
+app.mount("/static", StaticFiles(directory="backend"), name="static")
 
 
 @app.exception_handler(AppError)
@@ -389,6 +389,7 @@ def health():
     return {"success": True, "status": "ok"}
 
 
+@app.get("/", include_in_schema=False)
 @app.get("/code.html", include_in_schema=False)
 def serve_frontend():
     return FileResponse(BASE_DIR.parent / "frontend" / "code.html")
